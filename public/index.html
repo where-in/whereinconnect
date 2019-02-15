@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang=zh><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><link rel=stylesheet type=text/css href=http://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css><title>steemkillers</title><script>// window.onbeforeunload = function() { 
+    //   return "确认离开当前页面吗？未保存的数据将会丢失";
+    // }
+
+    function IsPC() {
+      var userAgentInfo = navigator.userAgent;
+      var Agents = ["Android", "iPhone",
+        "SymbianOS", "Windows Phone",
+        "iPad", "iPod"];
+      var flag = true;
+      for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+          flag = false;
+          break;
+        }
+      }
+      return flag;
+    }
+    var flag = IsPC();
+    if(flag){
+      document.documentElement.style.fontSize = '100px';
+    }else{
+      // document.getElementById('loader').classList.add("phone");           
+      document.documentElement.style.fontSize = '150px';
+    }</script><link href=/css/chunk-vendors.1380d430.css rel=stylesheet><link href=/css/app.dd66721c.css rel=stylesheet></head><body><noscript><strong>We're sorry but killb doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=/js/chunk-vendors.945c97fd.js></script><script src=/js/app.3fedf688.js></script></body></html>

@@ -1,0 +1,117 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+html{
+  font-size: 100px;
+}
+
+html,body {
+  height: 100%;
+  width: 100%;
+}
+body{
+  font-size: 1rem;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(34, 34, 34, 0.2); /*滚动条的背景颜色*/
+}
+::-webkit-scrollbar-track:horizontal{
+  background-color: #fff;
+}
+::-webkit-scrollbar {
+  cursor: pointer;
+  width: 10px; /*滚动条的宽度*/
+  height: 10px; /*滚动条的高度*/
+}
+// ::-webkit-scrollbar-thumb:vertical {
+//   /*垂直滚动条的样式*/
+//   // height: 50px;
+//   background-color: #9f9f9f;
+//   outline: 2px solid #fff;
+//   outline-offset: 2px;
+//   border: 1px solid #fff;
+// }
+::-webkit-scrollbar-thumb {
+  /*滚动条的样式*/
+  background-color: #9f9f9f;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border: 1px solid #fff;
+}
+::-webkit-scrollbar-thumb:hover {
+  /*滚动条的hover样式*/
+  cursor: pointer;
+  background-color: #57afd3;
+}
+
+
+
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table;
+  width: 0;
+  height: 0;
+  clear: both;
+}
+
+// ==========mose 重置==========
+.mu-table-empty{
+  height: 200px !important;
+  color: #fff !important;
+  font-size: 20px !important;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.mu-item-title,
+.mu-dialog,
+.mu-flat-button,
+.mu-form-item-label,
+.mu-input
+{
+  font-size: 0.16rem;
+}
+.mu-tooltip{
+  font-size: 0.14rem;
+}
+.mu-form-item-help{
+  font-size: 0.14rem;
+  bottom: -10px;
+}
+
+.mu-dialog-title{
+  font-size: 0.22rem;
+  i{
+    font-size: 0.3rem !important;
+  }
+}
+.mu-scale{
+  // width: 3.5rem !important;
+}
+.mu-form-item-label{
+
+}
+.mu-raised-button,.mu-button{
+  font-size: 0.16rem;
+  // min-width: 0.8rem;
+  height: 0.36rem;
+}
+.mu-dialog-actions{
+  padding: 0.2rem;
+  justify-content: space-around;
+}
+
+.mu-snackbar{
+  font-size: 0.16rem;
+  min-height: 0.48rem;
+  min-width: 2.88rem;
+  max-width: 5.68rem;
+}
+.mu-snackbar-top{
+  top: 0.1rem;
+}
+
+.mu-raised-button.mu-button-small{
+  font-size: 0.13rem;
+}
