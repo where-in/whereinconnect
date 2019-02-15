@@ -58,7 +58,7 @@
             label-position="left"
           >
             <p>
-              <span>此操作需要您的发贴密钥(posting key)或主密码(master password)</span>
+              <span>此操作需要您的发贴密钥(posting key)</span>
             </p>
             <mu-form-item
               prop="username"
@@ -73,7 +73,7 @@
                 autocomplete="off"
                 placeholder="用户名"
               >
-                <mu-flex class="loadingWrap">
+                <div class="loadingWrap">
                   <mu-icon v-if="loadStatus==3" value="clear" color="red"></mu-icon>
                   <mu-icon v-else-if="loadStatus==2" value="done" color="green"></mu-icon>
                   <mu-icon
@@ -82,7 +82,7 @@
                     color="blue"
                     class="customLoading"
                   ></mu-icon>
-                </mu-flex>
+                </div>
               </mu-text-field>
             </mu-form-item>
             <mu-form-item prop="wif" :error-text="loginErrorText.wif" :rules="roomSecretRules">
@@ -92,7 +92,7 @@
                 autocorrect="off"
                 autocapitalize="none"
                 autocomplete="off"
-                placeholder="密码或者发贴密钥"
+                placeholder="发贴密钥(posting key)"
               >
                 <mu-checkbox
                   v-model="showPwd"
@@ -103,7 +103,7 @@
               </mu-text-field>
             </mu-form-item>
 
-            <mu-button color="primary" @click="auth" :disabeld="!formLoading" class="muSub">
+            <mu-button color="primary" @click="auth"  class="muSub">
               <mu-icon
                 left
                 v-if="formLoading"
@@ -112,9 +112,16 @@
                 class="customLoading"
               ></mu-icon>登录
             </mu-button>
+
+
+
             <div style="padding-top:10px">
-              <a href="https://github.com/where-in/whereinconnect" target="blank" alt="whereinconnect" title="whereinconnect">
-                <svg height="32"  viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+              <a class="githubIcon" href="https://github.com/where-in/whereinconnect" target="blank" alt="whereinconnect" title="whereinconnect">
+                <span>
+                  <svg height="32"  viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+                </span>
+                <span>whereinconnect</span>
+
               </a>
             </div>
 
@@ -194,12 +201,23 @@ export default {
       this.AuthorizeForm = false;
     },
     auth() {
+      this.loginErrorText.wif="";
+      this.loginErrorText.username="";
       this.$refs.addRoomForm.validate().then(result => {
+        let account = this.steemUser;
+        if(!account||account.name!=this.loginForm.username){
+          this.loginErrorText.username = "没有该用户或者请等待验证";
+          return false;
+        }
+        if(this.loginForm.wif.length<=3){
+          this.loginErrorText.wif = "请输入长度大于3的密码";
+          return false
+        }
         if (!result) {
           return;
         }
         let isWif = steem.auth.isWif(this.loginForm.wif);
-        let roles = ["posting", "owner", "memo", , "active"];
+        let roles = ["posting", "owner", "memo", "active"];
         const privateWif = isWif
           ? this.loginForm.wif
           : steem.auth.toWif(
@@ -211,7 +229,7 @@ export default {
         const publicWif = steem.auth.wifToPublic(privateWif);
         let wifIsValid = false;
         let role;
-        let account = this.steemUser;
+
         for (let i = 0; i < roles.length; i += 1) {
           if (
             (roles[i] === "memo" && account.memo_key === publicWif) ||
@@ -292,8 +310,8 @@ export default {
     //   })
     // },
     getUserDetail() {
-      let result = this.resultValiedate[this.loginForm.username];
-      if (result && result > 0) {
+      let result = this.resultValiedate.text==this.loginForm.username
+      if (result) {
         return;
       }
       if (this.loginForm.username.length == 0) {
@@ -312,21 +330,22 @@ export default {
           if (data.result.length == 1) {
             this.steemUser = data.result[0];
             this.loadStatus = 2;
-            this.resultValiedate[this.loginForm.username] = 1;
+            this.resultValiedate.text=this.loginForm.username;
+            this.resultValiedate.value=false;
           } else {
             this.loadStatus = 3;
             this.loginErrorText.username = "没有该用户";
-            this.resultValiedate[this.loginForm.username] = 2;
+            this.resultValiedate.text=this.loginForm.username;
+            this.resultValiedate.value=true;
           }
           console.log(data);
         })
         .catch(err => {
-          if (err.message.indexOf("Network Error") >= 0) {
-            this.loginErrorText.username = "网络错误，请稍后再试";
-          }
+          this.loginErrorText.username = "网络错误，请稍后再试";
           this.loadStatus = 3;
           console.log(err);
-          this.resultValiedate[this.loginForm.username] = 2;
+          this.resultValiedate.text=this.loginForm.username;
+          this.resultValiedate.value=false;
         });
     },
     GetQueryString(name) {
@@ -440,6 +459,8 @@ export default {
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
+  color: #fff;
+  background-color: rgb(59,162,244);
 }
 
 p {
@@ -490,11 +511,12 @@ p {
   font-size: 1rem;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
   transition: all 0.3s;
   color: #000 !important;
   width: calc(100% - 50px) !important;
+  padding:0px 40px 0px 20px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
 }
 .customLoading {
   animation: rotate 1s linear infinite;
@@ -507,7 +529,18 @@ p {
   background: #fff;
   left: -9px;
 }
-.mu-checkbox-ripple-wrapper {
+.githubIcon{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 80px;
+    color:#000;
+
+}
+.githubIcon span{
+  height: 32px;
+  line-height: 32px;
+  float: left;
 }
 @keyframes rotate {
   0% {
